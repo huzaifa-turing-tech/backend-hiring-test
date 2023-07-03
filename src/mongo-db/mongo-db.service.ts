@@ -5,7 +5,9 @@ import { AudioCall } from './models';
 
 @Injectable()
 export class MongoDbService {
-  constructor(private configService: ConfigService) {}
+  constructor(private configService: ConfigService) {
+    this.createMongoDbConnection();
+  }
   async createMongoDbConnection() {
     try {
       const connection = await mongoose.connect(
