@@ -1,23 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import mongoose from 'mongoose';
 import { AudioCall } from './models';
 
 @Injectable()
-export class MongoDbService {
-  constructor(private configService: ConfigService) {
-    this.createMongoDbConnection();
-  }
-  async createMongoDbConnection() {
-    try {
-      const connection = await mongoose.connect(
-        this.configService.get('MONGO_DB_URI'),
-      );
-      console.log('Connected to MongoDB');
-    } catch (e) {
-      console.log('Error connecting to the database');
-    }
-  }
+export class MongoDbService { 
   async createAudioCall(
     sid: string,
     callStatus: string,
