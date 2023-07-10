@@ -21,7 +21,7 @@ import { HydratedDocument } from 'mongoose';
 export type AudioCallDocument = HydratedDocument<AudioCall>;
 
 @Schema({
-  timestamps:true
+  timestamps: true,
 })
 export class AudioCall {
   @Prop({
@@ -49,4 +49,4 @@ export class AudioCall {
   from: string;
 }
 
-const AudioCallSchema = SchemaFactory.createForClass(AudioCall);
+export const AudioCallSchema = SchemaFactory.createForClass(AudioCall);
