@@ -1,4 +1,11 @@
-import { Controller, Get, Post, Body } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { AudioCallService } from './audio-call.service';
 import type { AudioCallDocument } from './models';
 import { StatusDto } from './dtos';
@@ -18,15 +25,23 @@ export class AudioCallController {
     } = body;
     console.log(body);
 
-    const audioCall: AudioCallDocument = await this.audioCallService.logCall(
-      sid,
-      callStatus,
-      callDuration,
-      audioFileLink,
-      from,
-    );
+    try {
+      const audioCall: AudioCallDocument = await this.audioCallService.logCall(
+        sid,
+        callStatus,
+        callDuration,
+        audioFileLink,
+        from,
+      );
 
-    return audioCall;
+      return audioCall;
+    } catch (error: any) {
+      if (error.code == 11000) {
+        throw new ForbiddenException('Call with SID already exists');
+      } else {
+        throw new BadRequestException('Something bad happened');
+      }
+    }
   }
 
   @Get('logs')
