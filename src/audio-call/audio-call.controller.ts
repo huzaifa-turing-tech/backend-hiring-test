@@ -5,10 +5,11 @@ import {
   Body,
   ForbiddenException,
   BadRequestException,
+  Query,
 } from '@nestjs/common';
 import { AudioCallService } from './audio-call.service';
 import type { AudioCallDocument } from './models';
-import { StatusDto } from './dtos';
+import { LogsDto, StatusDto } from './dtos';
 
 @Controller('audioCall')
 export class AudioCallController {
@@ -45,10 +46,10 @@ export class AudioCallController {
   }
 
   @Get('logs')
-  async getLogs(): Promise<AudioCallDocument[]> {
-    const audioCalls: AudioCallDocument[] =
-      await this.audioCallService.getLogs();
-
+  async getLogs(@Query() query: LogsDto): Promise<AudioCallDocument[]> {
+    const audioCalls: AudioCallDocument[] = await this.audioCallService.getLogs(
+      query,
+    );
     return audioCalls;
   }
 }
