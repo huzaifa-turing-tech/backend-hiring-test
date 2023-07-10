@@ -1,23 +1,24 @@
-import { Controller, Get, Post, Req, Res } from '@nestjs/common';
-import { Request, Response } from 'express';
+import { Controller, Get, Post, Body } from '@nestjs/common';
 import { AudioCallService } from './audio-call.service';
 import type { AudioCallDocument } from './models';
+import { StatusDto } from './dtos';
 
 @Controller('audioCall')
 export class AudioCallController {
   constructor(private audioCallService: AudioCallService) {}
 
   @Post('status')
-  async status(@Req() req: Request): Promise<AudioCallDocument> {
+  async status(@Body() body: StatusDto): Promise<AudioCallDocument> {
     const {
       CallSid: sid,
       CallStatus: callStatus,
       CallDuration: callDuration,
       RecordingUrl: audioFileLink,
       From: from,
-    } = req.body;
-    console.log(req.body);
-    const audioCall = await this.audioCallService.logCall(
+    } = body;
+    console.log(body);
+
+    const audioCall: AudioCallDocument = await this.audioCallService.logCall(
       sid,
       callStatus,
       callDuration,
@@ -27,9 +28,11 @@ export class AudioCallController {
 
     return audioCall;
   }
+
   @Get('logs')
   async getLogs(): Promise<AudioCallDocument[]> {
-    const audioCalls = await this.audioCallService.getLogs();
+    const audioCalls: AudioCallDocument[] =
+      await this.audioCallService.getLogs();
 
     return audioCalls;
   }

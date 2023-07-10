@@ -1,6 +1,7 @@
-import { Controller, Post, Res, Req, Header } from '@nestjs/common';
+import { Controller, Post, Res, Req, Header, Body } from '@nestjs/common';
 import { TwilioService } from '../services/twilio.service';
 import { Request, Response } from 'express';
+import { InputDto } from '../dtos';
 
 @Controller('twilio')
 export class TwilioController {
@@ -16,11 +17,10 @@ export class TwilioController {
 
   @Post('input')
   @Header('Content-Type', 'text/xml')
-  input(@Req() req: Request): string {
-    const { Digits } = req.body;
+  input(@Body() body: InputDto): string {
+    const { Digits } = body;
 
     const inputResponse = this.twilioService.handleInput(Digits);
-
     return inputResponse;
   }
 
@@ -28,7 +28,6 @@ export class TwilioController {
   @Header('Content-Type', 'text/xml')
   end(): string {
     const response = this.twilioService.createEndCallRequest();
-
     return response;
   }
 }
