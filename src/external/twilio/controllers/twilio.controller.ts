@@ -8,15 +8,15 @@ export class TwilioController {
 
   @Post('connect')
   @Header('Content-Type', 'text/xml')
-  connect(@Res() res: Response) {
+  connect(): string {
     const callResponse = this.twilioService.handleConnect();
-
+    console.log(typeof callResponse);
     return callResponse;
   }
 
   @Post('input')
   @Header('Content-Type', 'text/xml')
-  input(@Res() res: Response, @Req() req: Request) {
+  input(@Req() req: Request): string {
     const { Digits } = req.body;
 
     const inputResponse = this.twilioService.handleInput(Digits);
@@ -26,7 +26,7 @@ export class TwilioController {
 
   @Post('end')
   @Header('Content-Type', 'text/xml')
-  end(@Res() res: Response) {
+  end(): string {
     const response = this.twilioService.createEndCallRequest();
 
     return response;

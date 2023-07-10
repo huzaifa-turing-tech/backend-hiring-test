@@ -7,15 +7,7 @@ import { URLs, voicePrompts } from '../constants';
 export class TwilioService {
   constructor(private configService: ConfigService) {}
 
-  dummy() {
-    return {
-      msg: 'Hello',
-      sid: this.configService.get('TWILIO_ACCOUNT_SID'),
-      authToken: this.configService.get('TWILIO_AUTH_TOKEN'),
-    };
-  }
-
-  handleConnect() {
+  handleConnect(): string {
     const response = new twiml.VoiceResponse();
     const inputRequest = response.gather({
       numDigits: 1,
@@ -35,7 +27,7 @@ export class TwilioService {
     return response.toString();
   }
 
-  handleInput(digits: string) {
+  handleInput(digits: string): string {
     const response = new twiml.VoiceResponse();
 
     if (!digits) {
@@ -80,11 +72,11 @@ export class TwilioService {
     return response.toString();
   }
 
-  createEndCallRequest = () => {
+  createEndCallRequest(): string {
     const response = new twiml.VoiceResponse();
     response.say(voicePrompts.GOODBYE);
     response.hangup();
 
     return response.toString();
-  };
+  }
 }

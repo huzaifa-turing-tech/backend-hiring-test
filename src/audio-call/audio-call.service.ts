@@ -1,9 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { ConfigService } from '@nestjs/config';
-import { twiml } from 'twilio';
-import { voicePrompts, URLs } from 'src/external/twilio/constants';
 import { InjectModel } from '@nestjs/mongoose';
-import { AudioCall } from './models';
+import { AudioCall, AudioCallDocument } from './models';
 import { Model } from 'mongoose';
 
 @Injectable({})
@@ -18,7 +15,7 @@ export class AudioCallService {
     callDuration: string,
     audioFileLink: string,
     from: string,
-  ) {
+  ): Promise<AudioCallDocument> {
     const newAudioCall = new this.audioCallModule({
       sid: sid,
       callDuration: callDuration,
@@ -26,11 +23,10 @@ export class AudioCallService {
       audioFileLink: audioFileLink,
       from: from,
     });
-    return await newAudioCall.save();
-  }
-  async getLogs() {
-    const logs = await this.audioCallModule.find();
 
-    return logs;
+    return newAudioCall.save();
+  }
+  async getLogs(): Promise<AudioCallDocument[]> {
+    return this.audioCallModule.find();
   }
 }
